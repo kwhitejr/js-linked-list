@@ -50,6 +50,9 @@ function linkedListGenerator(){
 
     get: function(number) {
       current = head;
+      if (number < 0) {
+        return false;
+      }
       for (var i=0; i < number; i++) {
         if (current.next === null) {
           return false;
@@ -62,22 +65,51 @@ function linkedListGenerator(){
     remove: function(number) {
       var target = this.get(number);
       var precursor = this.get(number-1);
-      var newTarget = this.get(number+1);
+      var newTarget = this.get(number+1) || null;
       current = head;
 
       if (!target) {
         return false;
       }
+      if (!precursor) {
+        target.next = null;
+        head = newTarget;
+      }
 
-      console.log("first", precursor);
       precursor.next = newTarget;
-      console.log("second", precursor);
       target.next = null;
-      this.getTail();
+      length--;
+      tail = this.getTail();
       return target;
     },
 
-    insert: function(value, number) {},
+    insert: function(newValue, number) {
+      var insertNode = {value: newValue, next: null};
+      var before = this.get(number-1);
+      var after = this.get(number) || null;
+
+      console.log("The linked list length is: ", length);
+
+      if (number < 0) {
+        return false;
+      }
+      if (number === 0) {
+        insertNode.next = after;
+        head = insertNode;
+      }
+      if (number > length-1) {
+        return false;
+      }
+      if (this.get(number)) {
+        insertNode.next = after;
+        before.next = insertNode;
+      }
+
+      length++;
+      head = this.get(0);
+      tail = this.getTail();
+
+    },
   };
 
 }
